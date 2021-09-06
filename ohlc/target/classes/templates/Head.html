@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHLC - ENGINE (Team 1)</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript" src="/javascripts/urlhandler.js"></script>
+    <script >
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+
+   
+      
+      
+      
+  function drawChart() {
+ 
+
+    var xmlhttp=new XMLHttpRequest();
+var url="http://localhost:8085/stocks/AAPL/2021-01-04/2021-01-010";
+//var url=processURL();
+
+xmlhttp.open("GET",url,true);
+xmlhttp.send();
+xmlhttp.onreadystatechange=function(){
+    if(this.readyState==4&&this.status==200)
+    {
+        var data=JSON.parse(this.responseText);
+        //console.log(data);
+        var high_data=data.map(function(elem){
+            return elem.high;
+        });
+        var low_data=data.map(function(elem){
+            return elem.low;
+        });
+        var date_data=data.map(function(elem){
+            return elem.date;
+        });
+
+        var open_data=data.map(function(elem){
+            return elem.open;
+        });
+
+        var close_data=data.map(function(elem){
+            return elem.close;
+        });
+
+
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'year');
+        data.addColumn('number', 'low');
+        data.addColumn('number','open');
+        data.addColumn('number','close')
+        data.addColumn('number','high')
+
+      
+        for(i = 0; i < high_data.length; i++)
+          data.addRow([date_data[i],low_data[i],open_data[i],close_data[i],high_data[i]]);
+
+
+        //  var data = google.visualization.arrayToDataTable(dataa, true);
+
+    var options = {
+      legend:'none'
+
+    };
+
+    var chart = new google.visualization.CandlestickChart(document.getElementById('canvas'));
+
+    chart.draw(data, options);
+        
+        
+
+
+
+    }
+}
+
+
+
+    
+  }
+
+
+  
+    </script>
+</head>
+<body>
+    <div class="navig_bar" id="mainbox">
+        <div class="navig_logo" id="logo">
+            <p>DASHBOARD</p>
+        </div>
+        <div class="navbar__toggle" id="mobile-menu">
+            <span class="bar"></span> <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <button class="logoutbut">
+            <a href="" id="but">logout</a>
+        </button>
+    </div>
+    <div class="mainsec">
+        <div class="userbox">
+            <div class="select">
+                
+                <form action="#"></form>
+                    Symbol:
+                    <br>
+                     <select name="Symbol" id="symbol" >
+                        <option value="" selected="selected">Select subject</option>
+                      </select>
+                      <br>
+                		<br>
+                <div>
+                    <p>Choose start date</p>
+               
+                        <input type="date" id="start" name="trip-start" value="2018-07-22" min="2000-01-01"
+                            max="2021-12-31" >
+               
+                </div><br>
+                <div>
+                    <p>Choose end date</p>
+                 
+                        <input type="date" id="end" name="trip-end" value="2018-07-22" min="2000-01-01"
+                            max="2021-12-31" >
+                   
+                </div><br>
+                <div class="submit">
+                    <input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
+                </div>
+            </div>
+             </form>
+            <div class="info">
+                <p>fgd</p>
+            </div>
+            
+        </div>
+        <div class="canvas" id="canvas">
+            <p>graph</p>
+        </div>
+        <div class="userselect">
+            <p>userselct</p>
+        </div>
+    </div>
+</body>
+</html>
